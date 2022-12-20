@@ -26,27 +26,24 @@ func postGames(c *gin.Context) {
 	var newGame game
 
 	// Call BindJSON to bind the received JSON to
-	// newAlbum.
+	// newGame.
 	if err := c.BindJSON(&newGame); err != nil {
 		return
 	}
 
-	// Add the new album to the slice.
+	// Add the new game to the slice.
 	games = append(games, newGame)
 	c.IndentedJSON(http.StatusCreated, newGame)
 }
 
-func getGameyID(c *gin.Context) {
+func getGameByID(c *gin.Context) {
 	id := c.Param("id")
-	year := c.Param("year")
-	// Loop over the list of albums, looking for
-	// an album whose ID value matches the parameter.
+	// Loop over the list of games, looking for
+	// an game whose ID value matches the parameter.
 	for _, a := range games {
-		if a.ID == id {
-			if a.Year == year {
-				c.IndentedJSON(http.StatusOK, a)
-				return
-			}
+		if a.ID == id {			
+			c.IndentedJSON(http.StatusOK, a)
+			return			
 		}
 
 	}
@@ -57,6 +54,6 @@ func main() {
 	router := gin.Default()
 	router.GET("/games", getGames)
 	router.POST("/games", postGames)
-	router.GET("/games/:id/:year", getGameyID)
+	router.GET("/games/:id", getGameByID)
 	router.Run("localhost:80")
 }
